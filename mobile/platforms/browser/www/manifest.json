@@ -1,0 +1,11 @@
+{
+  "background_color": "#FFF",
+  "display": "standalone",
+  "name": "Making the case",
+  "short_name": "Making the case",
+  "version": "io.markab.makingthecase",
+  "description": "Protect the integrity of your images",
+  "author": "Sam Alghanmi",
+  "icons": [],
+  "start_url": "index.html"
+}
