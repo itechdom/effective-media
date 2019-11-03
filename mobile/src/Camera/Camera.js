@@ -85,10 +85,12 @@ const CameraView = ({
         window.localStorage.setItem("md5", md5Hash);
         setMD5Hash(md5Hash);
         setImageExif(allMetaData);
-        hash_createModel({
-          hashId: md5Hash,
-          metaData: allMetaData
-        });
+        if (sourceType !== 2) {
+          hash_createModel({
+            hashId: md5Hash,
+            metaData: allMetaData
+          });
+        }
       },
       actionLabel
     );
