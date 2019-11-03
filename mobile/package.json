@@ -5,7 +5,7 @@
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",
   "scripts": {
-    "start": "npm run prepare && cordova run android",
+    "start": "npm run prepare && cordova run android && cordova run browser",
     "deploy": "./node_modules/.bin/webpack --env.production && cp -a lib/ client/ && cp -a ./index.html client/ && ./node_modules/.bin/serverless client deploy --no-confirm",
     "prepare": "cp -a index.html www/ && npm run build && cordova prepare android && cordova prepare browser",
     "build": "./node_modules/.bin/webpack --env.production",

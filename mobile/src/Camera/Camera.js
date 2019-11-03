@@ -2,7 +2,44 @@ import React from "react";
 import { Button, Grid } from "../orbital-templates/Material";
 import EXIF from "exif-js";
 import md5 from "blueimp-md5";
-import { Card, CardImage, CardHeader, CardContent } from "@material-ui/core";
+import {
+  Card,
+  CardMedia,
+  CardHeader,
+  CardContent,
+  Table,
+  TableRow,
+  TableCell,
+  Typography
+} from "@material-ui/core";
+import Maps from "../Maps/Maps";
+
+const Row = ({ placeholder, value }) => (
+  <TableRow>
+    <TableCell>
+      <Typography variant="subtitle2">{placeholder}</Typography>
+    </TableCell>
+    <TableCell>{value}</TableCell>
+  </TableRow>
+);
+
+export const ExifInfo = ({ imageExif }) => (
+  <>
+    <Maps lat={imageExif.GPSLatitude} long={imageExif.GPSLongitude} />
+    {Object.keys(imageExif).map(key => {
+      return (
+        <Row
+          placeholder={key}
+          value={
+            typeof imageExif[key] === "string"
+              ? imageExif[key]
+              : JSON.stringify(imageExif[key])
+          }
+        ></Row>
+      );
+    })}
+  </>
+);
 
 export const processImage = (img, onData, actionLabel) => {
   alert("processingImage");
@@ -42,14 +79,18 @@ const CameraView = ({
     const img = document.getElementById("current-image");
     setImageData("");
     setImageData(data);
-    return processImage(img, (md5Hash, allMetaData) => {
-      let previousMd5Hash = window.localStorage.getItem("md5");
-      setPreviousMD5Hash(previousMd5Hash);
-      window.localStorage.setItem("md5", md5Hash);
-      setMD5Hash(md5Hash);
-      setImageExif(JSON.stringify(allMetaData));
-      alert(md5Hash);
-    });
+    return processImage(
+      img,
+      (md5Hash, allMetaData) => {
+        let previousMd5Hash = window.localStorage.getItem("md5");
+        setPreviousMD5Hash(previousMd5Hash);
+        window.localStorage.setItem("md5", md5Hash);
+        setMD5Hash(md5Hash);
+        setImageExif(allMetaData);
+        alert(md5Hash);
+      },
+      actionLabel
+    );
   }
   return (
     <>
@@ -72,25 +113,34 @@ const CameraView = ({
           {actionLabel ? actionLabel : "Take a picture"}
         </Button>
       </Grid>
-      <div style={{ display: "grid", height: "100%" }}>
-        <h5 id="exif">{imageExif}</h5>
-        <div id="allMetaDataSpan"></div>
-        Previous
-        <input type="text" value={previousMd5Hash} />
-        Current
-        <input type="text" value={md5Hash} />
-        <img
-          style={{ maxWidth: "100%", maxHeight: "100vh", margin: "auto" }}
-          width="100%"
-          height="auto"
-          id="current-image"
-          src={imageData}
-        />
-        <canvas
-          style={{ width: "5000px", height: "5000px" }}
-          id={"myCanvas" + actionLabel}
-        />
-      </div>
+      <Card style={{ overflow: "scroll" }}>
+        <CardContent>
+          <Table>
+            <div style={{ display: "grid", height: "100%" }}>
+              <Row
+                placeholder="previous md5 hash"
+                value={<input type="text" value={previousMd5Hash} />}
+              ></Row>
+              <Row
+                placeholder="current md5 hash"
+                value={<input type="text" value={md5Hash} />}
+              ></Row>
+            </div>
+          </Table>
+          <ExifInfo imageExif={imageExif} />
+          <img
+            style={{ maxWidth: "100%", maxHeight: "100vh", margin: "auto" }}
+            width="100%"
+            height="auto"
+            id="current-image"
+            src={imageData}
+          />
+        </CardContent>
+      </Card>
+      <canvas
+        style={{ width: "5000px", height: "5000px", display: "none" }}
+        id={"myCanvas" + actionLabel}
+      />
     </>
   );
 };

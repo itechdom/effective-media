@@ -54,8 +54,8 @@ const App = topProps => {
                           const img = document.getElementById("current-image");
                           processImage(
                             img,
-                            md5Hash => {
-                              alert(md5Hash);
+                            (md5Hash, allMetaData) => {
+                              console.log(allMetaData);
                             },
                             actionLabel
                           );
