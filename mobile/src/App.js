@@ -35,58 +35,29 @@ class App extends React.Component {
         <Switch>
           <Route
             exact
-            path="/verify"
-            render={props => {
-              return (
-                <Crud
-                  modelName="hashes"
-                  SERVER={config.SERVER}
-                  offlineStorage={offlineStorage}
-                  notificationDomainStore={rootStore.notificationDomainStore}
-                  crudDomainStore={rootStore.crudDomainStore}
-                >
-                  <Notification
-                    notificationDomainStore={rootStore.notificationDomainStore}
-                  >
-                    <MainWrapper
-                      routeList={routeList}
-                      {...props}
-                      {...this.props}
-                    >
-                      <Camera actionLabel={"Choose a picture"} sourceType={0} />
-                    </MainWrapper>
-                  </Notification>
-                </Crud>
-              );
-            }}
-          ></Route>
-          <Route
-            exact
             path="/images"
             render={props => {
               return (
-                <Crud
-                  modelName="hashes"
-                  SERVER={config.SERVER}
-                  offlineStorage={offlineStorage}
-                  notificationDomainStore={rootStore.notificationDomainStore}
-                  crudDomainStore={rootStore.crudDomainStore}
-                >
-                  <Notification
+                <MainWrapper routeList={routeList} {...props} {...this.props}>
+                  <Crud
+                    modelName="hash"
+                    SERVER={config.SERVER}
+                    offlineStorage={offlineStorage}
                     notificationDomainStore={rootStore.notificationDomainStore}
+                    crudDomainStore={rootStore.crudDomainStore}
                   >
-                    <MainWrapper
-                      routeList={routeList}
-                      {...props}
-                      {...this.props}
+                    <Notification
+                      notificationDomainStore={
+                        rootStore.notificationDomainStore
+                      }
                     >
                       <Camera
                         actionLabel={"Open photo Gallery"}
                         sourceType={2}
                       />
-                    </MainWrapper>
-                  </Notification>
-                </Crud>
+                    </Notification>
+                  </Crud>
+                </MainWrapper>
               );
             }}
           ></Route>
@@ -95,25 +66,23 @@ class App extends React.Component {
             exact
             render={props => {
               return (
-                <Crud
-                  modelName="making-the-case"
-                  SERVER={config.SERVER}
-                  offlineStorage={offlineStorage}
-                  notificationDomainStore={rootStore.notificationDomainStore}
-                  crudDomainStore={rootStore.crudDomainStore}
-                >
-                  <Notification
+                <MainWrapper routeList={routeList} {...props} {...this.props}>
+                  <Crud
+                    modelName="hash"
+                    SERVER={config.SERVER}
+                    offlineStorage={offlineStorage}
                     notificationDomainStore={rootStore.notificationDomainStore}
+                    crudDomainStore={rootStore.crudDomainStore}
                   >
-                    <MainWrapper
-                      routeList={routeList}
-                      {...props}
-                      {...this.props}
+                    <Notification
+                      notificationDomainStore={
+                        rootStore.notificationDomainStore
+                      }
                     >
                       <Camera actionLabel={"Open camera"} sourceType={1} />
-                    </MainWrapper>
-                  </Notification>
-                </Crud>
+                    </Notification>
+                  </Crud>
+                </MainWrapper>
               );
             }}
           />
@@ -128,5 +97,6 @@ export default withOrbital({
   theme,
   rootStore,
   offlineStorage,
-  routeList
+  routeList,
+  disableAuth: true
 })(App);

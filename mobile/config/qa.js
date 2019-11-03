@@ -1,8 +1,8 @@
-import { remote } from "./hosts";
+import { remote, local } from "./hosts";
 const config = {
   SERVER: {
     host: remote,
-    port: 4000
+    port: ""
   }
 };
 export default config;

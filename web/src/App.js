@@ -1,15 +1,14 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import NotFound from "./NotFound/NotFound";
 import { routeList } from "./Routes";
 import config from "Config";
 import { Crud, Notification } from "@markab.io/react";
-import rootStore from "./Store/rootStore";
+import rootStore from "../../mobile/src/Store/rootStore";
 import { styles } from "./App.styles";
 import { withStyles } from "@material-ui/core/styles";
-import { MainWrapper } from "./orbital-templates/Material";
-import Camera from "./Camera/Camera";
-import Verification from "./Verification/Verification";
+import { MainWrapper } from "../../mobile/src/orbital-templates/Material";
+import FileInput from "../../mobile/src/orbital-templates/Material/_shared/Forms/Inputs/Forms.ImageFileInput";
+import { processImage } from "../../mobile/src/Camera/Camera";
 const offlineStorage = {
   getItem: () => {
     return new Promise((resolve, reject) => {
@@ -22,23 +21,22 @@ const offlineStorage = {
     });
   }
 };
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  componentDidMount() {}
-  componentWillReceiveProps(nextProps) {}
-  render() {
-    return (
-      <React.Fragment>
-        <Switch>
-          <Route
-            exact
-            path="/verify"
-            render={props => {
-              return (
+const App = topProps => {
+  const [imageData, setImageData] = React.useState();
+  const actionLabel = "verify-an-image";
+  return (
+    <React.Fragment>
+      <Switch>
+        <Route
+          exact
+          path="/"
+          render={props => {
+            return (
+              <MainWrapper routeList={routeList} {...props} {...topProps}>
+                <img id="current-image" src={imageData} />
+
                 <Crud
-                  modelName="making-the-case"
+                  modelName="hash"
                   SERVER={config.SERVER}
                   offlineStorage={offlineStorage}
                   notificationDomainStore={rootStore.notificationDomainStore}
@@ -47,79 +45,37 @@ class App extends React.Component {
                   <Notification
                     notificationDomainStore={rootStore.notificationDomainStore}
                   >
-                    <MainWrapper
-                      routeList={routeList}
-                      {...props}
-                      {...this.props}
-                    >
-                      <Camera actionLabel={"Choose a picture"} sourceType={0} />
-                    </MainWrapper>
+                    <FileInput
+                      onMediaDrop={data => {
+                        const reader = new FileReader();
+                        // it's onload event and you forgot (parameters)
+                        reader.onload = function(e) {
+                          setImageData(e.target.result);
+                          const img = document.getElementById("current-image");
+                          processImage(
+                            img,
+                            md5Hash => {
+                              alert(md5Hash);
+                            },
+                            actionLabel
+                          );
+                        };
+                        // you have to declare the file loading
+                        reader.readAsDataURL(data[0]);
+                      }}
+                    />
                   </Notification>
                 </Crud>
-              );
-            }}
-          ></Route>
-          <Route
-            exact
-            path="/images"
-            render={props => {
-              return (
-                <Crud
-                  modelName="making-the-case"
-                  SERVER={config.SERVER}
-                  offlineStorage={offlineStorage}
-                  notificationDomainStore={rootStore.notificationDomainStore}
-                  crudDomainStore={rootStore.crudDomainStore}
-                >
-                  <Notification
-                    notificationDomainStore={rootStore.notificationDomainStore}
-                  >
-                    <MainWrapper
-                      routeList={routeList}
-                      {...props}
-                      {...this.props}
-                    >
-                      <Camera
-                        actionLabel={"Open photo Gallery"}
-                        sourceType={2}
-                      />
-                    </MainWrapper>
-                  </Notification>
-                </Crud>
-              );
-            }}
-          ></Route>
-          <Route
-            path="/"
-            exact
-            render={props => {
-              return (
-                <Crud
-                  modelName="making-the-case"
-                  SERVER={config.SERVER}
-                  offlineStorage={offlineStorage}
-                  notificationDomainStore={rootStore.notificationDomainStore}
-                  crudDomainStore={rootStore.crudDomainStore}
-                >
-                  <Notification
-                    notificationDomainStore={rootStore.notificationDomainStore}
-                  >
-                    <MainWrapper
-                      routeList={routeList}
-                      {...props}
-                      {...this.props}
-                    >
-                      <Camera actionLabel={"Open camera"} sourceType={1} />
-                    </MainWrapper>
-                  </Notification>
-                </Crud>
-              );
-            }}
-          />
-        </Switch>
-      </React.Fragment>
-    );
-  }
-  componentWillReceiveProps(nextProps) {}
-}
+                <canvas
+                  style={{ width: "5000px", height: "5000px" }}
+                  id={"myCanvas" + actionLabel}
+                />
+              </MainWrapper>
+            );
+          }}
+        ></Route>
+      </Switch>
+    </React.Fragment>
+  );
+};
 export default withStyles(styles)(App);

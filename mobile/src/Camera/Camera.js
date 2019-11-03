@@ -4,14 +4,31 @@ import EXIF from "exif-js";
 import md5 from "blueimp-md5";
 import { Card, CardImage, CardHeader, CardContent } from "@material-ui/core";
 
+export const processImage = (img, onData, actionLabel) => {
+  alert("processingImage");
+  img.onload = function() {
+    alert("image loaded");
+    EXIF.getData(img, function(d) {
+      let allMetaData = EXIF.getAllTags(this);
+      let c = document.getElementById("myCanvas" + actionLabel);
+      let ctx = c.getContext("2d");
+      let img = document.getElementById("current-image");
+      const width = allMetaData.ImageWidth;
+      const height = allMetaData.ImageHeight;
+      ctx.drawImage(img, 0, 0, width, height);
+      let md5Hash = md5(c.toDataURL());
+      onData(md5Hash, allMetaData);
+    });
+  };
+};
 const CameraView = ({
   sourceType,
   actionLabel,
-  hashes,
-  hashes_createModel,
-  hashes_getModel
+  hash,
+  hash_createModel,
+  hash_getModel,
+  ...rest
 }) => {
-  console.log("hashes are", hashes);
   const [imageData, setImageData] = React.useState();
   const [imageExif, setImageExif] = React.useState();
   const [md5Hash, setMD5Hash] = React.useState();
@@ -20,39 +37,19 @@ const CameraView = ({
   function onFail(message) {
     console.error("Error! because: " + JSON.stringify(message));
   }
-  function processImage(img) {
-    alert("processingImage");
-    img.onload = function() {
-      alert("image loaded");
-      EXIF.getData(img, function(d) {
-        let allMetaData = EXIF.getAllTags(this);
-        let c = document.getElementById("myCanvas" + actionLabel);
-        let ctx = c.getContext("2d");
-        let img = document.getElementById("current-image");
-        const width = allMetaData.ImageWidth;
-        const height = allMetaData.ImageHeight;
-        ctx.drawImage(img, 0, 0, width, height);
-        let bitmapData = ctx.getImageData(0, 0, width, height).data;
-        setImageExif(JSON.stringify(allMetaData));
-        // let md5Hash = md5(`${bitmapData}`);
-        let md5Hash = md5(c.toDataURL());
-        alert(md5Hash);
-        let previousMd5Hash = window.localStorage.getItem("md5");
-        setPreviousMD5Hash(previousMd5Hash);
-        // alert(`Current ${md5Hash}\n
-        // Previous ${previousMd5Hash}\n
-        // do they match? ${md5Hash === previousMd5Hash}
-        // `);
-        window.localStorage.setItem("md5", md5Hash);
-        setMD5Hash(md5Hash);
-      });
-    };
-  }
+
   function onSuccess(data) {
     const img = document.getElementById("current-image");
     setImageData("");
     setImageData(data);
-    return processImage(img);
+    return processImage(img, (md5Hash, allMetaData) => {
+      let previousMd5Hash = window.localStorage.getItem("md5");
+      setPreviousMD5Hash(previousMd5Hash);
+      window.localStorage.setItem("md5", md5Hash);
+      setMD5Hash(md5Hash);
+      setImageExif(JSON.stringify(allMetaData));
+      alert(md5Hash);
+    });
   }
   return (
     <>

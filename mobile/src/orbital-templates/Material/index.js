@@ -5,7 +5,7 @@ import MainWrapper from "./Wrappers/MainWrapper";
 // import ConfirmDeleteModal from "./_shared/ConfirmDeleteModal/ConfirmDeleteModal";
 // import FloatingAddButton from "./_shared/FloatingAddButton/FloatingAddButton";
 // import Forms from "./_shared/Forms/Forms";
-// import * as Inputs from "./_shared/Forms/Inputs";
+import * as Inputs from "./_shared/Forms/Inputs";
 import {
   Card,
   CardActions,
