@@ -6,10 +6,11 @@ import config from "Config";
 import { Crud, Notification } from "@markab.io/react";
 import rootStore from "./Store/rootStore";
 import { styles } from "./App.styles";
+import theme from "./theme";
 import { withStyles } from "@material-ui/core/styles";
 import { MainWrapper } from "./orbital-templates/Material";
 import Camera from "./Camera/Camera";
-import Verification from "./Verification/Verification";
+import withOrbital from "./withOrbitalMobile";
 const offlineStorage = {
   getItem: () => {
     return new Promise((resolve, reject) => {
@@ -38,7 +39,7 @@ class App extends React.Component {
             render={props => {
               return (
                 <Crud
-                  modelName="making-the-case"
+                  modelName="hashes"
                   SERVER={config.SERVER}
                   offlineStorage={offlineStorage}
                   notificationDomainStore={rootStore.notificationDomainStore}
@@ -65,7 +66,7 @@ class App extends React.Component {
             render={props => {
               return (
                 <Crud
-                  modelName="making-the-case"
+                  modelName="hashes"
                   SERVER={config.SERVER}
                   offlineStorage={offlineStorage}
                   notificationDomainStore={rootStore.notificationDomainStore}
@@ -122,4 +123,10 @@ class App extends React.Component {
   }
   componentWillReceiveProps(nextProps) {}
 }
-export default withStyles(styles)(App);
+export default withOrbital({
+  styles,
+  theme,
+  rootStore,
+  offlineStorage,
+  routeList
+})(App);

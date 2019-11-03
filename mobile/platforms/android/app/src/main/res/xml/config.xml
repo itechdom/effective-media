@@ -81,4 +81,5 @@
     <preference name="BackgroundColor" value="0" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="CameraUsesGeolocation" value="true" />
+    <preference name="GOOGLE_MAPS_ANDROID_API_KEY" value="909768555295-3b2jcfd2shralki2396922k9f9rbjr4g.apps.googleusercontent.com" />
 </widget>

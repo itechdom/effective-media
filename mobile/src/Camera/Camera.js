@@ -4,7 +4,14 @@ import EXIF from "exif-js";
 import md5 from "blueimp-md5";
 import { Card, CardImage, CardHeader, CardContent } from "@material-ui/core";
 
-const CameraView = ({ sourceType, actionLabel }) => {
+const CameraView = ({
+  sourceType,
+  actionLabel,
+  hashes,
+  hashes_createModel,
+  hashes_getModel
+}) => {
+  console.log("hashes are", hashes);
   const [imageData, setImageData] = React.useState();
   const [imageExif, setImageExif] = React.useState();
   const [md5Hash, setMD5Hash] = React.useState();
