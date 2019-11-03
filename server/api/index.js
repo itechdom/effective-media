@@ -8,6 +8,7 @@ const mediaApi = require("./Media");
 const localizationApi = require("./Localization");
 const jwtApi = require("./Jwt");
 const formsApi = require("./Forms");
+const hashApi = require("./Hashes");
 const orbitalApi = ({
   config,
   userModel,
@@ -15,7 +16,8 @@ const orbitalApi = ({
   notificationsModel,
   formsModel,
   kernelModel,
-  settingsModel
+  settingsModel,
+  hashModel
 }) => {
   let authApiRoutes = authApi({
     config,
@@ -61,6 +63,13 @@ const orbitalApi = ({
     permissionsModel,
     formsModel
   });
+  let hashApiRoutes = hashApi({
+    config,
+    userModel,
+    permissionsModel,
+    hashModel,
+    formsModel
+  });
   let mediaApiRoutes = mediaApi({
     config
   });
@@ -74,7 +83,8 @@ const orbitalApi = ({
     jwtApiRoutes,
     mediaApiRoutes,
     kernelApiRoutes,
-    notificationsApiRoutes
+    notificationsApiRoutes,
+    hashApiRoutes
   };
 };
 

@@ -15,9 +15,9 @@ const settingsModel = require("./api/MongoDb/models/settings");
 const permissionsSchema = require("./api/MongoDb/models/permissions");
 const permissionsModel = mongoose.model("Permissions", permissionsSchema);
 const formsSchema = require("./api/MongoDb/models/forms");
-const notificationsSchema = require("./api/MongoDb/models/notifications");
-const notificationsModel = mongoose.model("Notification", notificationsSchema);
 const formsModel = mongoose.model("Forms", formsSchema);
+const hashSchema = require("./api/MongoDb/models/hash");
+const hashModel = mongoose.model("Hash", hashSchema);
 const expressPrintRoutes = require("express-print-routes");
 const path = require("path");
 
@@ -74,6 +74,7 @@ const getAllApis = () => {
     formsModel,
     settingsModel,
     userModel,
+    hashModel,
     config
   };
   const {
@@ -82,7 +83,8 @@ const getAllApis = () => {
     jwtApiRoutes,
     aclApiRoutes,
     formsApiRoutes,
-    settingsApiRoutes
+    settingsApiRoutes,
+    hashApiRoutes
   } = Orbital({
     ...defaultProps
   });
@@ -93,6 +95,7 @@ const getAllApis = () => {
     aclApiRoutes,
     formsApiRoutes,
     settingsApiRoutes,
+    hashApiRoutes,
     ...defaultProps
   };
 };
@@ -104,11 +107,13 @@ const registerAllRoutes = ({
   userApiRoutes,
   jwtApiRoutes,
   aclApiRoutes,
+  hashApiRoutes,
   ...defaultProps
 }) => {
   app.use("/", authApiRoutes);
   app.use("/jwt", jwtApiRoutes);
   app.use("/users", jwtApiRoutes, ...userApiRoutes);
+  app.use("/hash", ...hashApiRoutes);
   app.use("/acl", jwtApiRoutes, ...aclApiRoutes);
 };
 
@@ -164,6 +169,7 @@ const main = () => {
     aclApiRoutes,
     formsApiRoutes,
     settingsApiRoutes,
+    hashApiRoutes,
     ...defaultProps
   } = getAllApis({ app, server });
   registerAllRoutes({
@@ -175,6 +181,7 @@ const main = () => {
     aclApiRoutes,
     formsApiRoutes,
     settingsApiRoutes,
+    hashApiRoutes,
     ...defaultProps
   });
   return { dbConnection, app };
