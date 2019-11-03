@@ -11,5 +11,5 @@ npm start
 ```
 to change config, take a look at the config folder
 
-#Questions
+# Questions
 Email any questions you have to samalghanmi@markab.io
