@@ -25,7 +25,7 @@ const Row = ({ placeholder, value }) => (
 
 export const ExifInfo = ({ imageExif }) => (
   <>
-    <Maps lat={imageExif.GPSLatitude} long={imageExif.GPSLongitude} />
+    {/* <Maps lat={imageExif.GPSLatitude} long={imageExif.GPSLongitude} /> */}
     {Object.keys(imageExif).map(key => {
       return (
         <Row
@@ -42,9 +42,7 @@ export const ExifInfo = ({ imageExif }) => (
 );
 
 export const processImage = (img, onData, actionLabel) => {
-  alert("processingImage");
   img.onload = function() {
-    alert("image loaded");
     EXIF.getData(img, function(d) {
       let allMetaData = EXIF.getAllTags(this);
       let c = document.getElementById("myCanvas" + actionLabel);
@@ -87,7 +85,10 @@ const CameraView = ({
         window.localStorage.setItem("md5", md5Hash);
         setMD5Hash(md5Hash);
         setImageExif(allMetaData);
-        alert(md5Hash);
+        hash_createModel({
+          hashId: md5Hash,
+          metaData: allMetaData
+        });
       },
       actionLabel
     );
@@ -127,7 +128,6 @@ const CameraView = ({
               ></Row>
             </div>
           </Table>
-          <ExifInfo imageExif={imageExif} />
           <img
             style={{ maxWidth: "100%", maxHeight: "100vh", margin: "auto" }}
             width="100%"
@@ -135,6 +135,7 @@ const CameraView = ({
             id="current-image"
             src={imageData}
           />
+          {imageExif && <ExifInfo imageExif={imageExif} />}
         </CardContent>
       </Card>
       <canvas
