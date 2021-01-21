@@ -55,7 +55,7 @@
     "passport-twitter": "^1.0.4",
     "react-scroll": "^1.7.12",
     "serverless-express": "^2.0.11",
-    "socket.io": "^1.7.3",
+    "socket.io": "^2.4.0",
     "stripe": "^6.25.1",
     "uuid": "^3.3.2"
   },
