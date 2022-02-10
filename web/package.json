@@ -85,7 +85,7 @@
     "mobx-devtools-mst": "^0.9.18",
     "mobx-react-devtools": "^6.0.3",
     "ngrok": "^3.2.5",
-    "node-sass": "^4.11.0",
+    "node-sass": "^7.0.0",
     "normalize.css": "^8.0.1",
     "sass-loader": "^7.1.0",
     "serverless": "^1.47.0",
