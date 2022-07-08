@@ -42,7 +42,7 @@
     "i18next-node-fs-backend": "^2.1.0",
     "joi": "^14.3.1",
     "jsonwebtoken": "^7.4.3",
-    "moment": "^2.23.0",
+    "moment": "^2.29.4",
     "mongoose": "^5.2.1",
     "mongoose-findorcreate": "^3.0.0",
     "mongoose-paginate": "^5.0.3",
